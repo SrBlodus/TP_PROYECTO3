@@ -13,7 +13,7 @@ class App(ctk.CTk):
         self.mostrar_ventana1_boton = tk.Button(self, text="MODIFICACION DE ESTADIAS Y COSTO DIARIO", command=self.mostrar_segunda_ventana1)
         self.mostrar_ventana1_boton.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
 
-        self.mostrar_ventana2_boton = tk.Button(self, text="REGISTRAR ESTADIAS",command=self.mostrar_segunda_ventana2)
+        self.mostrar_ventana2_boton = tk.Button(self, text="REGISTRAR ESTADIAS", command=self.mostrar_segunda_ventana2)
         self.mostrar_ventana2_boton.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
 
         self.mostrar_ventana3_boton = tk.Button(self, text="LISTAR", command=self.mostrar_tercera_ventana2)
@@ -37,7 +37,6 @@ class App(ctk.CTk):
         tercera_ventana.grab_set()
         self.wait_window(tercera_ventana)
 
-if __name__ == "__main__":
+def show_main_menu():
     app = App()
-
     app.mainloop()

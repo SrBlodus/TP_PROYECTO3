@@ -38,6 +38,8 @@ class ESTADIASAPP(tk.Toplevel):
         super().__init__(parent)
 
 
+        self.geometry("1200x800")
+
         self.title("REGISTRO DE ESTADIAS")
         # Conexión a la base de datos
         engine = create_engine('mysql+pymysql://root@localhost/tp_programacion3')

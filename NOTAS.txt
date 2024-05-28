@@ -1,2 +1,5 @@
 HAY VARIAS FUNCIONES QUE SE REPITEN Y SON LA MISMA COSA EN LA VENTANASECUNDARIA 2, SE PUEDE OPTIMIZAR ESO
-CONTROLAR ALGUNOS ERRORES
+
+CONTROLAR ALGUNOS ERRORES, VENTANA 1 : HAY UNA FUNCION QUE NO SOLEMOS USAR, SE PUEDE CAMBIAR ESO. OSINO APRENDER PARA QUE FUNCIONA ESA FUNCION EN LINEA 52 self.tabla_habitaciones.bind("<<TreeviewSelect>>", self.seleccionar_habitacion)  
+
+tengo que crear otro menu igual al de seleccion de operaciones, que contenga una opcion mas para agregar usuarios: entonces debe haber dos uno para usuarios normales y el otro si es que inicia seccion con usuario admin que contenga esa opcion de agregar usuarios
