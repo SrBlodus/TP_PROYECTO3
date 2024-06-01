@@ -37,9 +37,6 @@ class ESTADIASAPP(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
 
-
-        self.geometry("1200x800")
-
         self.title("REGISTRO DE ESTADIAS")
         # Conexión a la base de datos
         engine = create_engine('mysql+pymysql://root@localhost/tp_programacion3')
@@ -61,8 +58,11 @@ class ESTADIASAPP(tk.Toplevel):
         self.tabla_habitaciones.heading("COSTO", text="COSTO")
         self.tabla_habitaciones.grid(row=1, column=0, columnspan=2,sticky="nsew", padx=5, pady=5)
 
+        self.tabla_habitaciones.column("TIPO", width=100)
+        self.tabla_habitaciones.column("COSTO", width=100)
+
         # ETIQUETAS TABLA DE REGISTROS
-        tk.Label(self, text="REGISTROS").grid(row=0, column=2, padx=1, pady=1)
+        tk.Label(self, text="REGISTROS").grid(row=0, column=2, columnspan=2, padx=1, pady=1)
 
         #MOSTRAR TABLA DE REGISTROS
         self.tabla_registros = ttk.Treeview(self, columns=("NRO", "TIPO", "COSTO", "DIAS", "PAGO", "SUBTOTAL",
@@ -75,8 +75,24 @@ class ESTADIASAPP(tk.Toplevel):
         self.tabla_registros.heading("SUBTOTAL", text="SUBTOTAL")
         self.tabla_registros.heading("%DESCUENTO", text="%DESCUENTO")
         self.tabla_registros.heading("TOTAL", text="TOTAL")
-        self.tabla_registros.grid(row=1, column=2, padx=1, pady=1)
+        self.tabla_registros.grid(row=1, column=2,sticky="nsew", padx=1, pady=1)
 
+        # Ajusta el ancho de las columnas para provocar la necesidad de un scroll horizontal
+        self.tabla_registros.column("NRO", width=100)
+        self.tabla_registros.column("TIPO", width=100)
+        self.tabla_registros.column("COSTO", width=100)
+        self.tabla_registros.column("DIAS", width=100)
+        self.tabla_registros.column("PAGO", width=100)
+        self.tabla_registros.column("SUBTOTAL", width=100)
+        self.tabla_registros.column("%DESCUENTO", width=100)
+        self.tabla_registros.column("TOTAL", width=150)
+
+        self.tabla_registros.grid(row=1, column=2, columnspan=2, sticky="nsew", padx=1, pady=1)
+
+        # scrollbar para tabla de registros
+        self.scrollbar_registros_x = ttk.Scrollbar(self, orient="horizontal", command=self.tabla_registros.xview)
+        self.tabla_registros.configure(xscrollcommand=self.scrollbar_registros_x.set)
+        self.scrollbar_registros_x.grid(row=2, column=2, columnspan=2, sticky='ew')
 
         # ETIQUETAS DIAS
         tk.Label(self, text="Días:").grid(row=2, column=0, padx=10, pady=10)
@@ -105,7 +121,7 @@ class ESTADIASAPP(tk.Toplevel):
         self.modificar_boton.grid(row=6, column=0, columnspan=2, padx=10, pady=10)
         # Crear el botón de finalizar estadia
         self.finalizar_boton = ctk.CTkButton(self, text="FINALIZAR ESTADIA", command=self.finalizar)
-        self.finalizar_boton.grid(row=2, column=2, columnspan=2, padx=1, pady=1)
+        self.finalizar_boton.grid(row=3, column=2, columnspan=2, padx=1, pady=1)
 
         self.cargar_datos_desde_db()
 
@@ -153,6 +169,9 @@ class ESTADIASAPP(tk.Toplevel):
                     self.tabla_registros.insert("", "end", values=(registro.NUMERO, registro.TIPO, registro.COSTO,
                                                                    registro.DIAS, registro.PAGO, registro.SUBTOTAL,
                                                                    registro.DESCUENTO, registro.TOTAL))
+                self.entry_dias.delete(0, tk.END)
+                self.entry_nro.delete(0, tk.END)
+
 
             else:
                 tk.messagebox.showerror("Error", "SELECCIONE UN TIPO DE HABITACION")

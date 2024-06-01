@@ -33,7 +33,7 @@ class VentanaSecundaria3(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.title("LISTAR RESUMENES")
+        self.title("RESUMEN")
 
         # Conexión a la base de datos
         engine = create_engine('mysql+pymysql://root@localhost/tp_programacion3')
@@ -46,7 +46,8 @@ class VentanaSecundaria3(tk.Toplevel):
 
         # Desplegable:
         self.tipo_habitacion_combobox = ttk.Combobox(self)
-        self.tipo_habitacion_combobox.grid(row=1, column=0, padx=5, pady=10, )
+        self.tipo_habitacion_combobox.grid(row=1, column=0, padx=5, pady=10)
+        self.tipo_habitacion_combobox.configure(state="readonly")
 
         # Botón para iniciar la consulta
         self.consultar_boton = ctk.CTkButton(self, text="Consultar", command=self.consultar_registros)

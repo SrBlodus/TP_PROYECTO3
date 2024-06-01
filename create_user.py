@@ -5,6 +5,8 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 import bcrypt
 import os
 
+from reiniciar_contrasena import reiniciar_contrasena
+
 engine = create_engine('mysql+pymysql://root@localhost/tp_programacion3')
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
@@ -63,10 +65,12 @@ class Crear_Usuario(tk.Toplevel):
         login_frame.pack()
 
     def cargar_datos_desde_db(self):
+        print("dentro de la funcion cargar datos")
         self.tabla_usuarios.delete(*self.tabla_usuarios.get_children())
         usuarios = session.query(User).all()
         for usuario in usuarios:
             self.tabla_usuarios.insert("", "end", values=(usuario.username, usuario.estado))
+            print(usuario.username,usuario.estado)
 
     def create_user(self, username, password):
         salt = bcrypt.gensalt()
@@ -98,12 +102,15 @@ class Crear_Usuario(tk.Toplevel):
         if usuario_seleccionado:
             username_registro = self.tabla_usuarios.item(usuario_seleccionado)['values'][0]
             consulta_usuario = session.query(User).filter_by(username=username_registro).first()
-            if consulta_usuario:
-                consulta_usuario.estado = "inactivo"
-                session.commit()
-                self.cargar_datos_desde_db()
+            if username_registro != "admin":
+                if consulta_usuario:
+                    consulta_usuario.estado = "inactivo"
+                    session.commit()
+                    self.cargar_datos_desde_db()
+                else:
+                    messagebox.showerror("Error", "No se encontró el usuario seleccionado")
             else:
-                messagebox.showerror("Error", "No se encontró el usuario seleccionado")
+                messagebox.showerror("OPERACION INVALIDA", "NO PUEDAS ANULAR A UN ADMIN")
         else:
             messagebox.showerror("Error", "Por favor, seleccione un usuario")
 
@@ -112,12 +119,21 @@ class Crear_Usuario(tk.Toplevel):
         if usuario_seleccionado:
             username_registro = self.tabla_usuarios.item(usuario_seleccionado)['values'][0]
             consulta_usuario = session.query(User).filter_by(username=username_registro).first()
-            if consulta_usuario:
-                consulta_usuario.estado = "nuevo"
-                session.commit()
-                self.cargar_datos_desde_db()
+            if username_registro != "admin":
+                if consulta_usuario:
+                    print(f"Reiniciando contraseña para: {username_registro}")
+                    x=reiniciar_contrasena(self, username_registro)
+                    print("Esperando a que la ventana de reinicio de contraseña se cierre...")
+                    x.wait_window()  # Espera a que la ventana de reiniciar_contrasena se cierre
+                    print("Ventana cerrada. Cargando datos desde la base de datos...")
+                    consulta_usuario.estado = "nuevo"
+                    session.commit()
+                    return self.cargar_datos_desde_db()
+                else:
+                    messagebox.showerror("Error", "No se encontró el usuario seleccionado")
             else:
-                messagebox.showerror("Error", "No se encontró el usuario seleccionado")
+                messagebox.showerror("OPERACION INVALIDA", "NO PUEDES REINICIAR A UN ADMIN")
         else:
             messagebox.showerror("Error", "Por favor, seleccione un usuario")
+
 

@@ -1,4 +1,3 @@
-import sys
 import tkinter as tk
 from tkinter import messagebox
 from sqlalchemy import create_engine, Column, String, Integer
@@ -16,8 +15,8 @@ class User(Base):
     salt = Column(String(64), nullable=False)
     estado = Column(String(9), nullable=False)
 
-class cambiar_contrasena(tk.Toplevel):
-    def __init__(self, parent, username):
+class reiniciar_contrasena(tk.Toplevel):
+    def __init__(self, parent, username_registro):
         super().__init__(parent)
         self.title("Cambiar Contraseña")
 
@@ -28,7 +27,7 @@ class cambiar_contrasena(tk.Toplevel):
         self.session = Session()
 
         # Guardar el nombre de usuario
-        self.username = username
+        self.username = username_registro
 
         # ETIQUETAS
         tk.Label(self, text="Nueva Contraseña: ").grid(row=0, column=0, padx=5, pady=10)
@@ -41,27 +40,26 @@ class cambiar_contrasena(tk.Toplevel):
         self.entry_nro2.grid(row=1, column=1, padx=5, pady=10)
 
         # Botón para confirmar el cambio de contraseña
-        self.consultar_boton = tk.Button(self, text="Cambiar Contraseña", command=self.cambiar)
+        self.consultar_boton = tk.Button(self, text="Restablecer Contraseña", command=self.cambiar)
         self.consultar_boton.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
 
     def cambiar(self):
+        print("Cambiar contraseña")
         contraseña1 = self.entry_nro1.get()
         contraseña2 = self.entry_nro2.get()
         if contraseña1 == contraseña2:
-            consulta_usuario = self.session.query(User).filter_by(username=self.username, estado="nuevo").first()
+            consulta_usuario = self.session.query(User).filter_by(username=self.username).first()
             if consulta_usuario:
                 salt = bcrypt.gensalt()
                 pepper = os.environ.get("PEPPER", "default_pepper")
                 hashed_password = bcrypt.hashpw(contraseña1.encode() + pepper.encode(), salt)
                 consulta_usuario.password = hashed_password.decode()
-                consulta_usuario.estado = "activo"
                 self.session.commit()
-                messagebox.showinfo("CONTRASEÑA", "Contraseña cambiada exitosamente!")
-                self.destroy()
-                self.master.destroy()  # Cierra la ventana principal de la aplicación
-                os.execl(sys.executable, sys.executable, *sys.argv)  # Reinicia el script
+                messagebox.showinfo("CONTRASEÑA", "Contraseña reiniciada exitosamente!")
+                print("Cerrando ventana")
+                self.destroy()  # Cierra la ventana después de cambiar la contraseña
+                print("se ejecuta destroy")
             else:
                 messagebox.showerror("Error", "El usuario no está en estado nuevo")
         else:
             messagebox.showerror("Error", "Las contraseñas no coinciden")
-

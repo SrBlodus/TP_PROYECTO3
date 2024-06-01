@@ -17,10 +17,10 @@ class App(ctk.CTk):
         self.mostrar_ventana2_boton = tk.Button(self, text="REGISTRAR ESTADIAS", command=self.mostrar_segunda_ventana2)
         self.mostrar_ventana2_boton.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
 
-        self.mostrar_ventana3_boton = tk.Button(self, text="LISTAR", command=self.mostrar_segunda_ventana3)
+        self.mostrar_ventana3_boton = tk.Button(self, text="GENERAR RESUMEN", command=self.mostrar_segunda_ventana3)
         self.mostrar_ventana3_boton.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
 
-        self.mostrar_ventana4_boton = tk.Button(self, text="AGREGAR USUARIO", command=self.mostrar_segunda_ventana4)
+        self.mostrar_ventana4_boton = tk.Button(self, text="ADMINISTRACION DE USUARIO", command=self.mostrar_segunda_ventana4)
         self.mostrar_ventana4_boton.grid(row=3, column=0, columnspan=3, padx=10, pady=10)
 
     def mostrar_segunda_ventana1(self):
